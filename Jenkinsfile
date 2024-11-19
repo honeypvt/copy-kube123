@@ -5,6 +5,7 @@ pipeline {
 
   environment {
     EKS_BIN_DIR = "${WORKSPACE}/bin"
+    PATH = "${WORKSPACE}/bin:${PATH}"
   }
 
   stages {
@@ -23,8 +24,9 @@ pipeline {
           sh 'chmod +x kubectl'
           sh 'mv kubectl ${EKS_BIN_DIR}/'
           
-          // Add EKS_BIN_DIR to PATH
-          sh 'export PATH=${EKS_BIN_DIR}:$PATH'
+          // Verify that the tools are accessible
+          sh 'eksctl version'
+          sh 'kubectl version --client'
           
           // Create EKS cluster
           sh 'eksctl create cluster --name demo-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
