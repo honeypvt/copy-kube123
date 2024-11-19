@@ -29,11 +29,7 @@ pipeline {
           sh 'kubectl version --client'
           
           // Set up AWS credentials
-          withCredentials([usernamePassword(credentialsId: 'AWS_CREDENTIALS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-            sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
-            sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
-            sh 'aws configure set default.region ap-south-1'
-            
+          withAWS(credentials: 'AWS_CREDENTIALS') {
             // Create EKS cluster
             sh 'eksctl create cluster --name demo-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
           }
