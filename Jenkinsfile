@@ -3,19 +3,28 @@ pipeline {
   
   tools { nodejs "node" }
 
+  environment {
+    EKS_BIN_DIR = "${WORKSPACE}/bin"
+  }
+
   stages {
     stage("Setup EKS Tools") {
       steps {
         script {
+          // Create a directory for eksctl and kubectl binaries
+          sh 'mkdir -p ${EKS_BIN_DIR}'
+          
           // Download and install eksctl
-          sh 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp'
-          sh 'mv /tmp/eksctl /usr/local/bin'
-          sh 'eksctl version'
+          sh 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ${EKS_BIN_DIR}'
+          sh '${EKS_BIN_DIR}/eksctl version'
           
           // Download and install kubectl
           sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
           sh 'chmod +x kubectl'
-          sh 'mv kubectl /usr/local/bin/'
+          sh 'mv kubectl ${EKS_BIN_DIR}/'
+          
+          // Add EKS_BIN_DIR to PATH
+          sh 'export PATH=${EKS_BIN_DIR}:$PATH'
           
           // Create EKS cluster
           sh 'eksctl create cluster --name demo-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
