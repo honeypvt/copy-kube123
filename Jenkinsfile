@@ -9,13 +9,13 @@ pipeline {
         script {
           // Download and install eksctl
           sh 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp'
-          sh 'sudo mv /tmp/eksctl /usr/local/bin'
+          sh 'mv /tmp/eksctl /usr/local/bin'
           sh 'eksctl version'
           
           // Download and install kubectl
           sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
           sh 'chmod +x kubectl'
-          sh 'sudo mv kubectl /usr/local/bin/'
+          sh 'mv kubectl /usr/local/bin/'
           
           // Create EKS cluster
           sh 'eksctl create cluster --name demo-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
@@ -26,7 +26,7 @@ pipeline {
     stage("Clone code from GitHub") {
       steps {
         script {
-          checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GITHUB_CREDENTIALS', url: 'https://github.com/honeypvt/copy-kube123']])
+          checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GITHUB_CREDENTIALS', url: 'https://github.com/honeypvt/Deploy-NodeApp-to-AWS-EKS-using-Jenkins-Pipeline']])
         }
       }
     }
