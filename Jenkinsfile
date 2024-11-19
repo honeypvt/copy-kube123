@@ -54,7 +54,7 @@ pipeline {
     stage('Build Node JS Docker Image') {
       steps {
         script {
-          sh 'docker build -t kushakumar/node-app-1.0 .'
+          sh 'docker build -t kushakumar/nodes-app-1.0 .'
         }
       }
     }
