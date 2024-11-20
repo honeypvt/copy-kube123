@@ -31,7 +31,7 @@ pipeline {
           // Set up AWS credentials
           withAWS(credentials: 'AWS_CREDENTIALS') {
             // Create EKS cluster
-            sh 'eksctl create cluster --name kushaku-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
+            sh 'eksctl create cluster --name tinku-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
           }
         }
       }
@@ -54,7 +54,7 @@ pipeline {
     stage('Build Node JS Docker Image') {
       steps {
         script {
-          sh 'docker build -t tinku/nodess-app-1.0 .'
+          sh 'docker build -t kushakumar/nodess-app-1.0 .'
         }
       }
     }
