@@ -31,7 +31,7 @@ pipeline {
           // Set up AWS credentials
           withAWS(credentials: 'AWS_CREDENTIALS') {
             // Create EKS cluster
-            sh 'eksctl create cluster --name kushak-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
+            sh 'eksctl create cluster --name kushaku-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
           }
         }
       }
@@ -54,7 +54,7 @@ pipeline {
     stage('Build Node JS Docker Image') {
       steps {
         script {
-          sh 'docker build -t kushakumar/nodes-app-1.0 .'
+          sh 'docker build -t kushakumar/nodess-app-1.0 .'
         }
       }
     }
@@ -65,7 +65,7 @@ pipeline {
           withCredentials([string(credentialsId: 'devopshintdocker', variable: 'devopshintdocker')]) {
             sh 'docker login -u kushakumar -p ${devopshintdocker}'
           }
-          sh 'docker push kushakumar/nodes-app-1.0'
+          sh 'docker push kushakumar/nodess-app-1.0'
         }
       }   
     }
@@ -73,7 +73,7 @@ pipeline {
     stage('Deploying Node App to Kubernetes') {
       steps {
         script {
-          sh ('aws eks update-kubeconfig --name kushak-ekscluster --region ap-south-1')
+          sh ('aws eks update-kubeconfig --name kushaku-ekscluster --region ap-south-1')
           sh "kubectl get ns"
           sh "kubectl apply -f nodejsapp.yaml"
         }
