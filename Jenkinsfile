@@ -31,7 +31,7 @@ pipeline {
           // Set up AWS credentials
           withAWS(credentials: 'AWS_CREDENTIALS') {
             // Create EKS cluster
-            sh 'eksctl create cluster --name demo-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
+            sh 'eksctl create cluster --name kusha-ekscluster --region ap-south-1 --version 1.31 --nodegroup-name linux-nodes --node-type t2.micro --nodes 2'
           }
         }
       }
@@ -73,7 +73,7 @@ pipeline {
     stage('Deploying Node App to Kubernetes') {
       steps {
         script {
-          sh ('aws eks update-kubeconfig --name demo-ekscluster --region ap-south-1')
+          sh ('aws eks update-kubeconfig --name kusha-ekscluster --region ap-south-1')
           sh "kubectl get ns"
           sh "kubectl apply -f nodejsapp.yaml"
         }
