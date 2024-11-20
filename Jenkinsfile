@@ -54,7 +54,7 @@ pipeline {
     stage('Build Node JS Docker Image') {
       steps {
         script {
-          sh 'docker build -t kushakumar/nodess-app-1.0 .'
+          sh 'docker build -t tinku/nodess-app-1.0 .'
         }
       }
     }
@@ -73,7 +73,7 @@ pipeline {
     stage('Deploying Node App to Kubernetes') {
       steps {
         script {
-          sh ('aws eks update-kubeconfig --name kushaku-ekscluster --region ap-south-1')
+          sh ('aws eks update-kubeconfig --name tinku-ekscluster --region ap-south-1')
           sh "kubectl get ns"
           sh "kubectl apply -f nodejsapp.yaml"
         }
